@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 # pylint: disable=missing-docstring
 import sys
+from argparse import ArgumentParser, REMAINDER
 import os
 import json
 
@@ -28,8 +29,8 @@ def get_destination(name):
         return parse_destination(name)
 
 
-def main(destantion_name, command, *command_args):
-    destination = get_destination(destantion_name)
+def run_command(destination_name, command, command_args):
+    destination = get_destination(destination_name)
     try:
         session = winrm.Session(
             destination['host'],
@@ -44,5 +45,29 @@ def main(destantion_name, command, *command_args):
         return 1
 
 
+def parse_options():
+    parser = ArgumentParser()
+    parser.add_argument(
+        'dest', metavar='DEST',
+        help='destination: my-user:my-password@my-host[:my-port]'
+    )
+    parser.add_argument(
+        'command', metavar='CMD', nargs='?',
+        help='powershell command (reads from stdin if not given)'
+    )
+    parser.add_argument(
+        'args', metavar='ARG', nargs=REMAINDER,
+        help='arguments of powershell command'
+    )
+    return parser.parse_args()
+
+
+def main():
+    opts = parse_options()
+    if opts.command is None:
+        opts.command = sys.stdin.read()
+    return run_command(opts.dest, opts.command, opts.args)
+
+
 if __name__ == '__main__':
-    sys.exit(main(*sys.argv[1:]))
+    sys.exit(main())

@@ -1,0 +1,48 @@
+#! /usr/bin/env python
+# pylint: disable=missing-docstring
+import sys
+import os
+import json
+
+import winrm
+
+
+def parse_destination(destination):
+    credentials, host = destination.split('@', 1)
+    user, password = credentials.split(':', 1)
+    return {'host': host, 'user': user, 'password': password}
+
+
+def read_config(filename):
+    try:
+        return json.load(open(filename))
+    except IOError:
+        return {}
+
+
+def get_destination(name):
+    config = read_config(os.path.join(os.getenv('HOME'), '.winrm.json'))
+    if name in config:
+        return config[name]
+    else:
+        return parse_destination(name)
+
+
+def main(destantion_name, command, *command_args):
+    destination = get_destination(destantion_name)
+    try:
+        session = winrm.Session(
+            destination['host'],
+            auth=(destination['user'], destination['password'])
+        )
+        process = session.run_ps(' '.join([command] + list(command_args)))
+        sys.stdout.write(process.std_out)
+        sys.stderr.write(process.std_err)
+        return process.status_code
+    except winrm.exceptions.WinRMTransportError as error:
+        sys.stderr.write(str(error) + '\n')
+        return 1
+
+
+if __name__ == '__main__':
+    sys.exit(main(*sys.argv[1:]))

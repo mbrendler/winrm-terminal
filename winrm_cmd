@@ -28,7 +28,7 @@ def list_destinations():
     config = read_config()
     max_len = len(max(config.keys(), key=len))
     for name, dest in config.iteritems():
-        print "%s - %s:xxx@%s" % (
+        print "%s -- %s:xxx@%s" % (
             name.ljust(max_len), dest['user'], dest['host']
         )
     return 0

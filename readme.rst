@@ -5,12 +5,11 @@ Install dependencies::
 
   $ pip install pywinrm
 
-
 Run command::
 
   $ ./winrm my-user:my-password@my-host[:my-port] COMMAND [ARGS..]
 
-You can add a ``~/.winrm.json`` with credentials::
+Add credentials to ``~/.winrm.json``::
 
   {
     "my-label": {
@@ -20,6 +19,6 @@ You can add a ``~/.winrm.json`` with credentials::
     }
   }
 
-Now you can run a command the following way::
+Now run a command the following way::
 
   $ ./winrm my-label COMMAND [ARGS..]

@@ -1,5 +1,5 @@
-winrm_cmd
-=========
+winrm
+=====
 
 Install dependencies::
 
@@ -8,7 +8,7 @@ Install dependencies::
 
 Run command::
 
-  $ ./winrm_cmd my-user:my-password@my-host[:my-port] COMMAND [ARGS..]
+  $ ./winrm my-user:my-password@my-host[:my-port] COMMAND [ARGS..]
 
 You can add a ``~/.winrm.json`` with credentials::
 
@@ -22,4 +22,4 @@ You can add a ``~/.winrm.json`` with credentials::
 
 Now you can run a command the following way::
 
-  $ ./winrm_cmd my-label COMMAND [ARGS..]
+  $ ./winrm my-label COMMAND [ARGS..]

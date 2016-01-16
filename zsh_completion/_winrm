@@ -6,7 +6,7 @@ if (( CURRENT > 2 )); then
   shift words
   shift words
   test "$CURRENT" -eq "${#words}" && words[-1]=()
-  cmds=$(sed -nE "s/^${words} ?([^ ]*)(.*)$/\\1[\\2]/p" ~/.winrm.commands)
+  cmds=$(sed -nE "s/^${words} ?([^ ]*)(.*)$/\\1[\\2]/p" ~/.winrm.commands 2> /dev/null)
   cmds_array=("${(f)cmds}")
   test -z "$cmds_array" || _values "winrm command" $cmds_array
 else

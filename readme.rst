@@ -3,7 +3,7 @@ winrm
 
 Install dependencies::
 
-  $ pip install pywinrm
+  $ pip install -r requirements.txt
 
 Run command::
 
